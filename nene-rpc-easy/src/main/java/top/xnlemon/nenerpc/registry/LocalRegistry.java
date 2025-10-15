@@ -24,7 +24,7 @@ public class LocalRegistry {
 
     /**
      * 获取服务
-     * @Param serviceName
+     * @param serviceName
      * @return
      */
     public static Class<?> get(String serviceName) {
@@ -33,7 +33,7 @@ public class LocalRegistry {
 
     /**
      * 删除服务
-     * @Param serviceName
+     * @param serviceName
      */
     public static void remove(String serviceName) {
         registryMap.remove(serviceName);

@@ -22,9 +22,9 @@ public class JdkSerializer implements Serializer {
 
     /**
      * 反序列化
-     * @Param bytes
-     * @Param type
-     * @Param <T>
+     * @param bytes
+     * @param type
+     * @param <T>
      * @return
      * @throws IOException
      */

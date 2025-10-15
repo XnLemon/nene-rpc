@@ -3,7 +3,6 @@ package top.xnlemon.example.consumer;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
-import cn.hutool.http.HttpUtil;
 import top.xnlemon.example.common.model.User;
 import top.xnlemon.example.common.service.UserService;
 import top.xnlemon.nenerpc.model.RpcRequest;
