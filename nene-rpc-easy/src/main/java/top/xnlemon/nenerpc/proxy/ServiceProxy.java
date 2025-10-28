@@ -3,6 +3,7 @@ package top.xnlemon.nenerpc.proxy;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import lombok.extern.slf4j.Slf4j;
 import top.xnlemon.nenerpc.config.RegistryConfig;
 import top.xnlemon.nenerpc.config.RpcConfig;
 import top.xnlemon.nenerpc.model.RpcRequest;
@@ -18,6 +19,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.List;
 
+@Slf4j
 public class ServiceProxy implements InvocationHandler{
 
 	/**
@@ -54,6 +56,7 @@ public class ServiceProxy implements InvocationHandler{
 		if (instances == null || instances.isEmpty()) {
 			throw new RuntimeException("未发现可用服务实例: " + serviceKey);
 		}
+		log.info("可用服务实例: {}", instances);
 
 		// 简单选择第一个实例（可替换为负载均衡）
 		ServiceMetaInfo target = instances.get(0);

@@ -12,6 +12,6 @@ public interface RegistryKeys {
 
     String ETCD_ADDRESS = "http://localhost:2380";
 
-    String ZOOKEEPER_ADDRESS = "http://localhost:2181";
+    String ZOOKEEPER_ADDRESS = "localhost:2181";
 
 }
