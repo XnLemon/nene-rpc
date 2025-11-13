@@ -51,10 +51,10 @@ public class RpcConfig {
 //     */
 //    private String tolerantStrategy;
 
-//    /**
-//     * 模拟调用
-//     */
-//    private boolean mock = false;
+    /**
+     * 模拟调用
+     */
+    private boolean mock = false;
 
     /**
      * 注册中心配置
