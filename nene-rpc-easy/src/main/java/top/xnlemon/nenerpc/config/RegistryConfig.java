@@ -15,13 +15,13 @@ public class RegistryConfig {
      * 注册中心类别
      * 支持多种注册中心实现
      */
-    private String registry = RegistryKeys.ZOOKEEPER;
+    private String registry = RegistryKeys.ETCD;
 
     /**
      * 注册中心地址
      * 默认值为本地服务器的地址和端口
      */
-    private String address = RegistryKeys.ZOOKEEPER_ADDRESS;
+    private String address = RegistryKeys.ETCD_ADDRESS;
 
     /**
      * 用户名

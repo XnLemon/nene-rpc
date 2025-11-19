@@ -1,0 +1,2 @@
+etcd=top.xnlemon.nenerpc.registry.EtcdRegistry
+zookeeper=top.xnlemon.nenerpc.registry.ZooKeeperRegistry

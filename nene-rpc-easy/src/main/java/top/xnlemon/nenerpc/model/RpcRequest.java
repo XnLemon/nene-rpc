@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import top.xnlemon.nenerpc.constant.RpcConstant;
 
 import java.io.Serializable;
 
@@ -18,22 +19,28 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class RpcRequest implements Serializable {
     /**
-     * ServiceName
+     * 服务名称
      */
     private String serviceName;
 
     /**
-     * MethodName
+     * 方法名称
      */
     private String methodName;
 
     /**
-     * 参数类型
+     * 服务版本
+     */
+    private String serviceVersion = RpcConstant.DEFAULT_SERVICE_VERSION;
+
+    /**
+     * 参数类型列表
      */
     private Class<?>[] parameterTypes;
 
     /**
-     * 参数
+     * 参数列表
      */
     private Object[] args;
+
 }

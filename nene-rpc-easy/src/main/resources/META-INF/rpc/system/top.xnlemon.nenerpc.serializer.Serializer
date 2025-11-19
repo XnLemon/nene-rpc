@@ -1,0 +1,4 @@
+jdk=top.xnlemon.nenerpc.serializer.JdkSerializer
+hessian=top.xnlemon.nenerpc.serializer.HessianSerializer
+json=top.xnlemon.nenerpc.serializer.JsonSerializer
+kryo=top.xnlemon.nenerpc.serializer.KryoSerializer

@@ -1,9 +1,14 @@
 package top.xnlemon.nenerpc;
 
+import top.xnlemon.nenerpc.config.RegistryConfig;
 import top.xnlemon.nenerpc.config.RpcConfig;
 import top.xnlemon.nenerpc.constant.RpcConstant;
+import top.xnlemon.nenerpc.registry.Registry;
+import top.xnlemon.nenerpc.registry.RegistryFactory;
 import top.xnlemon.nenerpc.utils.ConfigUtils;
 import lombok.extern.slf4j.Slf4j;
+
+
 
 /**
  * RPC 框架应用
@@ -14,19 +19,6 @@ public class RpcApplication {
 
     private static volatile RpcConfig rpcConfig;
 
-    /**
-     * 框架初始化，支持传入自定义配置
-     *
-     * @param newRpcConfig
-     */
-    public static void init(RpcConfig newRpcConfig) {
-        rpcConfig = newRpcConfig;
-        log.info("rpc init, config = {}", newRpcConfig.toString());
-    }
-
-    /**
-     * 初始化
-     */
     public static void init() {
         RpcConfig newRpcConfig;
         try {
@@ -38,6 +30,21 @@ public class RpcApplication {
         init(newRpcConfig);
     }
 
+    /**
+     * 框架初始化，支持传入自定义配置
+     *
+     * @param newRpcConfig
+     */
+
+    public static void init(RpcConfig newRpcConfig) {
+        rpcConfig = newRpcConfig;
+        log.info("rpc init, config = {}", newRpcConfig.toString());
+        // 注册中心初始化
+        RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
+        Registry registry = RegistryFactory.getInstance(registryConfig.getRegistry());
+        registry.init(registryConfig);
+        log.info("registry init, config = {}", registryConfig);
+    }
     /**
      * 获取配置
      *

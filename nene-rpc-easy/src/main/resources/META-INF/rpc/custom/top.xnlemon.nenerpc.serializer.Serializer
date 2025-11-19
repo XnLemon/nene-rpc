@@ -1,0 +1,2 @@
+hessian=top.xnlemon.nenerpc.serializer.HessianSerializer
+kryo=top.xnlemon.nenerpc.serializer.KryoSerializer
