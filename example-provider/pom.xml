@@ -11,7 +11,7 @@
     <dependencies>
         <dependency>
             <groupId>top.xnlemon</groupId>
-            <artifactId>nene-rpc-easy</artifactId>
+            <artifactId>nene-rpc-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
