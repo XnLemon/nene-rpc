@@ -8,13 +8,13 @@ import top.xnlemon.nenerpc.model.ServiceMetaInfo;
 import top.xnlemon.nenerpc.registry.LocalRegistry;
 import top.xnlemon.nenerpc.registry.Registry;
 import top.xnlemon.nenerpc.registry.RegistryFactory;
-import top.xnlemon.nenerpc.server.HttpServer;
-import top.xnlemon.nenerpc.server.VertxHttpServer;
+import top.xnlemon.nenerpc.server.tcp.VertxTcpServer;
 
 /**
  * 简易服务提供者示例
  */
 public class ProviderExample {
+
     public static void main(String[] args) {
         // RPC 框架初始化
         RpcApplication.init();
@@ -37,8 +37,8 @@ public class ProviderExample {
             throw new RuntimeException(e);
         }
 
-        // 启动 web 服务
-        HttpServer httpServer = new VertxHttpServer();
-        httpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
+        // 启动 TCP 服务
+        VertxTcpServer vertxTcpServer = new VertxTcpServer();
+        vertxTcpServer.doStart(8081);
     }
 }
