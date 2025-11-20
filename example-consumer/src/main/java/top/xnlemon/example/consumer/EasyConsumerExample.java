@@ -2,9 +2,8 @@ package top.xnlemon.example.consumer;
 
 import top.xnlemon.example.common.model.User;
 import top.xnlemon.example.common.service.UserService;
-import top.xnlemon.nenerpc.config.RpcConfig;
 import top.xnlemon.nenerpc.proxy.ServiceProxyFactory;
-import top.xnlemon.nenerpc.utils.ConfigUtils;
+
 
 
 /**

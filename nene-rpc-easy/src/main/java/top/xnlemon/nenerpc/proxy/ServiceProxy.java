@@ -6,7 +6,6 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import top.xnlemon.nenerpc.RpcApplication;
-import top.xnlemon.nenerpc.config.RegistryConfig;
 import top.xnlemon.nenerpc.config.RpcConfig;
 import top.xnlemon.nenerpc.constant.RpcConstant;
 import top.xnlemon.nenerpc.model.RpcRequest;
@@ -14,7 +13,6 @@ import top.xnlemon.nenerpc.model.RpcResponse;
 import top.xnlemon.nenerpc.model.ServiceMetaInfo;
 import top.xnlemon.nenerpc.registry.Registry;
 import top.xnlemon.nenerpc.registry.RegistryFactory;
-import top.xnlemon.nenerpc.registry.ZooKeeperRegistry;
 import top.xnlemon.nenerpc.serializer.SerializerFactory;
 import top.xnlemon.nenerpc.serializer.Serializer;
 
