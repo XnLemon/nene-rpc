@@ -1,0 +1,3 @@
+no=top.xnlemon.nenerpc.fault.retry.NoRetryStrategy
+fixedInterval=top.xnlemon.nenerpc.fault.retry.FixedIntervalRetryStrategy
+exponentialBackoff=top.xnlemon.nenerpc.fault.retry.ExponentialBackoffRetryStrategy

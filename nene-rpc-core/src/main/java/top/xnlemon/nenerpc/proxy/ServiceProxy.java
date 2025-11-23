@@ -1,14 +1,16 @@
 package top.xnlemon.nenerpc.proxy;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.IdUtil;
-import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.net.NetClient;
 import lombok.extern.slf4j.Slf4j;
 import top.xnlemon.nenerpc.RpcApplication;
 import top.xnlemon.nenerpc.config.RpcConfig;
 import top.xnlemon.nenerpc.constant.RpcConstant;
+import top.xnlemon.nenerpc.fault.retry.RetryStrategy;
+import top.xnlemon.nenerpc.fault.retry.RetryStrategyFactory;
+import top.xnlemon.nenerpc.fault.tolerant.TolerantStrategy;
+import top.xnlemon.nenerpc.fault.tolerant.TolerantStrategyFactory;
+import top.xnlemon.nenerpc.loadbalancer.LoadBalancer;
+import top.xnlemon.nenerpc.loadbalancer.LoadBalancerFactory;
 import top.xnlemon.nenerpc.model.RpcRequest;
 import top.xnlemon.nenerpc.model.RpcResponse;
 import top.xnlemon.nenerpc.model.ServiceMetaInfo;
@@ -22,8 +24,11 @@ import top.xnlemon.nenerpc.server.tcp.VertxTcpClient;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+
 
 @Slf4j
 public class ServiceProxy implements InvocationHandler {
@@ -47,26 +52,44 @@ public class ServiceProxy implements InvocationHandler {
 				.parameterTypes(method.getParameterTypes())
 				.args(args)
 				.build();
+		// 序列化
+		byte[] bodyBytes = serializer.serialize(rpcRequest);
+		// 从注册中心获取服务提供者请求地址
+		RpcConfig rpcConfig = RpcApplication.getRpcConfig();
+		Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
+		ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
+		serviceMetaInfo.setServiceName(serviceName);
+		serviceMetaInfo.setServiceVersion(RpcConstant.DEFAULT_SERVICE_VERSION);
+		List<ServiceMetaInfo> serviceMetaInfoList = registry.serviceDiscovery(serviceMetaInfo.getServiceKey());
+		if (CollUtil.isEmpty(serviceMetaInfoList)) {
+			throw new RuntimeException("暂无服务地址");
+		}
+		LoadBalancer loadBalancer = LoadBalancerFactory.getInstance(rpcConfig.getLoadBalancer());
+		Map<String,Object> requestParams = new HashMap<>();
+		requestParams.put("methodName", rpcRequest.getMethodName());
+		ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams,serviceMetaInfoList);
+
+
+		RpcResponse rpcResponse;
 		try {
-			// 序列化
-			byte[] bodyBytes = serializer.serialize(rpcRequest);
-			// 从注册中心获取服务提供者请求地址
-			RpcConfig rpcConfig = RpcApplication.getRpcConfig();
-			Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
-			ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
-			serviceMetaInfo.setServiceName(serviceName);
-			serviceMetaInfo.setServiceVersion(RpcConstant.DEFAULT_SERVICE_VERSION);
-			List<ServiceMetaInfo> serviceMetaInfoList = registry.serviceDiscovery(serviceMetaInfo.getServiceKey());
-			if (CollUtil.isEmpty(serviceMetaInfoList)) {
-				throw new RuntimeException("暂无服务地址");
-			}
-			ServiceMetaInfo selectedServiceMetaInfo = serviceMetaInfoList.get(0);
+
 			// 发送 TCP 请求
-			RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo);
+			// 使用重试机制
+			RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
+			rpcResponse = retryStrategy.doRetry(() ->
+					VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
+			);
 			return rpcResponse.getData();
 		} catch (Exception e) {
-			throw new RuntimeException("调用失败");
+			// 容错机制
+			TolerantStrategy tolerantStrategy = TolerantStrategyFactory.getInstance(rpcConfig.getTolerantStrategy());
+			Map<String, Object> requestTolerantParamMap = new HashMap<>();
+			requestTolerantParamMap.put("rpcRequest",rpcRequest);
+			requestTolerantParamMap.put("selectedServiceMetaInfo",selectedServiceMetaInfo);
+			requestTolerantParamMap.put("serviceMetaInfoList",serviceMetaInfoList);
+			rpcResponse = tolerantStrategy.doTolerant(requestTolerantParamMap, e);
 		}
+		return rpcResponse.getData();
 	}
 }
 
