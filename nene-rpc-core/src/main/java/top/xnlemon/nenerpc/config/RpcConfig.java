@@ -1,5 +1,9 @@
 package top.xnlemon.nenerpc.config;
 
+import top.xnlemon.nenerpc.fault.retry.RetryStrategyKeys;
+import top.xnlemon.nenerpc.fault.tolerant.TolerantStrategyKeys;
+import top.xnlemon.nenerpc.loadbalancer.LoadBalancer;
+import top.xnlemon.nenerpc.loadbalancer.LoadBalancerKeys;
 import top.xnlemon.nenerpc.serializer.SerializerKeys;
 import lombok.Data;
 
@@ -36,20 +40,20 @@ public class RpcConfig {
      */
     private String serializer = SerializerKeys.JDK;
 
-//    /**
-//     * 负载均衡器
-//     */
-//    private String loadBalancer;
-//
-//    /**
-//     * 重试策略
-//     */
-//    private String retryStrategy;
-//
-//    /**
-//     * 容错策略
-//     */
-//    private String tolerantStrategy;
+    /**
+     * 负载均衡器
+     */
+    private String loadBalancer = LoadBalancerKeys.ROUND_ROBIN;
+
+    /**
+     * 重试策略
+     */
+    private String retryStrategy = RetryStrategyKeys.FIXED_INTERVAL;
+
+    /**
+     * 容错策略
+     */
+    private String tolerantStrategy = TolerantStrategyKeys.FAIL_BACK;
 
     /**
      * 模拟调用

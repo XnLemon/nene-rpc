@@ -1,0 +1,3 @@
+roundRobin=top.xnlemon.nenerpc.loadbalancer.RoundRobinLoadBalancer
+random=top.xnlemon.nenerpc.loadbalancer.RandomLoadBalancer
+consistentHash=top.xnlemon.nenerpc.loadbalancer.ConsistentHashLoadBalancer
