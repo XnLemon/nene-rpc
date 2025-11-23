@@ -1,0 +1,4 @@
+failBack=top.xnlemon.nenerpc.fault.tolerant.FailBackTolerantStrategy
+failFast=top.xnlemon.nenerpc.fault.tolerant.FailFastTolerantStrategy
+failOver=top.xnlemon.nenerpc.fault.tolerant.FailOverTolerantStrategy
+failSafe=top.xnlemon.nenerpc.fault.tolerant.FailSafeTolerantStrategy
